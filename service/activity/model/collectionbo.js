@@ -10,7 +10,10 @@ var collectionSchema = mongoose.Schema({
     "user_id": String,
     "activity": String,
     "activity_id": String,
-    "status": Number,//状态 0-未收藏 1-已收藏
+    "status": {     //状态 0-未收藏 1-已收藏
+        type: Number,
+        default: 1,
+    }
 
 },{
     "timestamps": {

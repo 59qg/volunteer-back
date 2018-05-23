@@ -44,6 +44,28 @@ UserService.save = function (bo, callback) {
     })
 }
 
+//登陆
+UserService.login = function (query, callback) {
+    this.findOne({username: query.account, password: query.password}, (err, ret) => {
+        if(err) {
+            callback(err);
+            return console.error(err);
+        }
+        else if(ret.length == 0) {
+            this.findOne({phone: query.account, password: query.account}, (err, ret) => {
+                if(err) {
+                    callback(err);
+                    return console.error(err);
+                }
+                callback(null, ret);
+            })
+        }
+        else {
+            callback(null, ret);
+        }
+    })
+}
+
 //修改（根据id）
 UserService.update = function (id, bo, callback) {
     User.findOne({_id: id}, function (err, org) {

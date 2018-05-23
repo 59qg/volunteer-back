@@ -21,7 +21,10 @@ var activitySchema = mongoose.Schema({
     "phone": String, //联系电话
     "county": String, //区县
     "county_code": String,
-    "status": Number,//状态 0-禁用 1-审核中 2-开展中  3-已结束 4-已拒绝
+    "status": {      //状态 0-禁用 1-审核中 2-开展中  3-已结束 4-已拒绝
+        type: Number,
+        default: 1,
+    }
 },{
     "timestamps": {
         create_time: 'create_time',   //创建时间

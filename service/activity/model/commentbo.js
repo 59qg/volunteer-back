@@ -11,7 +11,10 @@ var commentSchema = mongoose.Schema({
     "activity": String,
     "activity_id": String,
     "content": String, //评论内容
-    "status": Number,//状态 0-删除 1-正常
+    "status": {  //状态 0-删除 1-正常
+        type: Number,
+        default: 1,
+    },
 },{
     "timestamps": {
         create_time: 'create_time',   //创建时间

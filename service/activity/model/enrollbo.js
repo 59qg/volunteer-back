@@ -10,7 +10,10 @@ var enrollSchema = mongoose.Schema({
     "user_id": String,
     "activity": String,
     "activity_id": String,
-    "status": Number,//状态 0-报名申请中 1-报名通过 2-已拒绝 3-未报名
+    "status": {
+        type: Number,
+        default: 0,
+    },//状态 0-报名申请中 1-报名通过 2-已拒绝 3-未报名
     "enroll_time": Date, //报名时间
     "review_time": Date, //审核时间
 },{

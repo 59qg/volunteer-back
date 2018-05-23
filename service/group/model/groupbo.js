@@ -20,7 +20,10 @@ var groupSchema = mongoose.Schema({
     "street_code": String,
     "community": String, //社区
     "community_code": String,
-    "status": Number,//状态 0-禁用 1-正常
+    "status": {
+        type: Number,
+        default: 1,
+    }//状态 0-禁用 1-正常
 },{
     "timestamps": {
         create_time: 'create_time',   //创建时间

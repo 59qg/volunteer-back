@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+var bodyParser = require('body-parser');
 
 var api = require('./routes/api');
 var appapi = require('./routes/appapi');
@@ -19,6 +22,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+    name: 'volunteer',
+    secret: 'volunteer',
+    resave: true,
+    rolling: true,
+    saveUninitialized: false,
+    cookie: config.cookie,
+    store: new RedisStore(config.sessionStore)
+}))
+app.use(function(req, res, next) {
+    let url = req.originalUrl;
+    if((url.indexof('appapi')==-1)&&(url.indexOf('login') == -1)){
+        //登陆判断
+        if(!req.session.id){
+            res.redirect('');
+        }
+        else{
+            next()
+        }
+    }
+    else {
+        next();
+    }
+});
 
 //app.use('/', indexRouter);
 //app.use('/api', usersRouter);

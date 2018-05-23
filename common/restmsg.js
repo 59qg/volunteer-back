@@ -11,6 +11,7 @@ function RestMsg(){
 RestMsg.prototype._RECODE_OK = 1;//正常
 RestMsg.prototype._RECODE_FAIL = -1;//异常
 RestMsg.prototype._NO_LOGIN = -2;//未登录
+RestMsg.prototype._NO_DATA = 2; //无数据
 RestMsg.prototype._RECODE_OK_MSG = 'success';//成功提示信息
 RestMsg.prototype._RECODE_FAIL_MSG = 'success';//失败默认提示信息
 
@@ -49,6 +50,11 @@ RestMsg.prototype.errorMsg = function(msg){
  */
 RestMsg.prototype.setResult = function(result){
     this.result = result;
+}
+
+RestMsg.prototype.setNoData = function(result) {
+    this. code = this._NO_DATA;
+    this.msg = result;
 }
 
 module.exports = RestMsg;
