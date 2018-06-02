@@ -10,6 +10,10 @@ ServiceGenerator.generate = function (model, key) {
 
     // 列表查询,不分页
     service.find = function (query, callback) {
+        if(query.id) {
+            query._id = query.id;
+            delete query.id;
+        }
         model.find(query, function (err, ret) {
             if (err) {
                 return callback(err);

@@ -5,6 +5,10 @@ function UserService() {}
 
 //根据条件查询一条数据
 UserService.findOne = function (query, callback) {
+    if(query.id) {
+        query._id = query.id;
+        delete query.id;
+    }
     User.findOne(query, function (err, ret) {
         if (err) {
             return callback(err);
@@ -122,3 +126,5 @@ UserService.findList = function (query, callback) {
         });
     });
 }
+
+module.exports = UserService;

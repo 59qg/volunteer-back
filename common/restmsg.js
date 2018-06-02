@@ -13,7 +13,7 @@ RestMsg.prototype._RECODE_FAIL = -1;//异常
 RestMsg.prototype._NO_LOGIN = -2;//未登录
 RestMsg.prototype._NO_DATA = 2; //无数据
 RestMsg.prototype._RECODE_OK_MSG = 'success';//成功提示信息
-RestMsg.prototype._RECODE_FAIL_MSG = 'success';//失败默认提示信息
+RestMsg.prototype._RECODE_FAIL_MSG = 'failed';//失败默认提示信息
 
 /**
  * api返回设置成功状态
@@ -54,6 +54,11 @@ RestMsg.prototype.setResult = function(result){
 
 RestMsg.prototype.setNoData = function(result) {
     this. code = this._NO_DATA;
+    this.msg = result;
+}
+
+RestMsg.prototype.setNoLogin = function(result) {
+    this. code = this._NO_LOGIN;
     this.msg = result;
 }
 

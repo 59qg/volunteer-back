@@ -3,8 +3,7 @@ var router = express.Router();
 var RestMsg = require('../../common/restmsg');
 var ParamCheck = require('../../common/paramcheck');
 var Page = require('../../common/page');
-var ActivityService = require('../../service/activity/activityservice')
-var EnrollService = require('../../service/activity/enrollservice')
+var NewsService = require('../../service/News/Newsservice')
 
 var _privateFun = router.prototype;
 _privateFun.prsBO2VO = function(obj) {
@@ -24,12 +23,7 @@ router.route('/list')
     .get(function(req, res, next) {
         let restmsg = new RestMsg();
         let params = {
-            other: ['county','row','start'],
-            fuzzy: ['title'],
-            paramType: {
-                'county': 'string',
-                'title': 'string',
-            }
+            other: ['row','start'],
         }
         let paramsTmp = ParamCheck.composeParams(req, params);
         if(paramsTmp.err) {
@@ -46,7 +40,7 @@ router.route('/list')
         }else {
             paramsTmp.query.start = Number(paramsTmp.query.start);
         }
-        ActivityService.findList(paramsTmp.query, (err, ret) => {
+        NewsService.findList(paramsTmp.query, (err, ret) => {
             if(err) {
                 restmsg.errorMsg(err);
             }
@@ -69,7 +63,7 @@ router.route('/detail')
         let restmsg = new RestMsg();
         let params = {
             require: {
-                id: '活动id'
+                id: '新闻id'
             },
             paramType: {
                 'id': 'string',
@@ -80,51 +74,17 @@ router.route('/detail')
             restmsg.errorMsg(paramsTmp.err);
             return res.send(restmsg);
         }
-        ActivityService.find(paramsTmp.query, (err, ret) => {
+        NewsService.find(paramsTmp.query, (err, ret) => {
             if(err) {
                 restmsg.errorMsg(err);
             }
             else if(ret){
-                let data = _privateFun.prsBO2VO(ret[0]);
-                restmsg.successMsg('success');
+                let data = _privateFun.prsBO2VO(ret);
+                restmsg.successMsg('登陆成功');
                 restmsg.setResult(data);
             }
 
             res.send(restmsg);
         })
     })
-
-router.route('/enroll')
-    .get(function(req, res, next) {
-        let restmsg = new RestMsg();
-        let params = {
-            require: {
-                activity_id: '活动id'
-            },
-            paramType: {
-                'activity_id': 'string',
-            }
-        }
-        let paramsTmp = ParamCheck.composeParams(req, params);
-        if(paramsTmp.err) {
-            restmsg.errorMsg(paramsTmp.err);
-            return res.send(restmsg);
-        }
-        EnrollService.find(paramsTmp.query, (err, ret) => {
-            if(err) {
-                restmsg.errorMsg(err);
-            }
-            else if(ret.length > 0){
-                let data = ret.map(_privateFun.prsBO2VO);
-                restmsg.successMsg('success');
-                restmsg.setResult(data);
-            }
-            else{
-                restmsg.successMsg('success');
-                restmsg.setResult(ret);
-            }
-            res.send(restmsg);
-        })
-    })
-
 module.exports = router;

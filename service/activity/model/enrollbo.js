@@ -10,6 +10,7 @@ var enrollSchema = mongoose.Schema({
     "user_id": String,
     "activity": String,
     "activity_id": String,
+    "user_gender": Number,
     "status": {
         type: Number,
         default: 0,

@@ -14,24 +14,25 @@ var activitySchema = mongoose.Schema({
     "recruit_time": Date, //招募截至时间
     "recruitment": Number, //招募人数
     "require": String, // 报名要求
-    "review": Boolean,//是否需要报名审核
+    "review": Number,//是否需要报名审核
     "group": String, //发起组织
     "group_code": String,
     "user": String, //联系人
     "phone": String, //联系电话
     "county": String, //区县
     "county_code": String,
+    "img": String,//图片
     "status": {      //状态 0-禁用 1-审核中 2-开展中  3-已结束 4-已拒绝
         type: Number,
         default: 1,
     }
 },{
     "timestamps": {
-        create_time: 'create_time',   //创建时间
-        update_time: 'update_time'    //修改时间
+        createdAt: 'createdAt',   //创建时间
+        updatedAt: 'updatedAt'    //修改时间
     }
 });
 
-var activity = mongoose.model('activity', activitySchema); // 将定义好的结构封装成model
+var activity = mongoose.model('activity', activitySchema, 'activitys'); // 将定义好的结构封装成model
 
 module.exports = activity; // 导出bo模块

@@ -1,20 +1,17 @@
 var Page = require('../../common/restmsg');
-var Activity = require('./model/acitvitybo');
-// var Collection = require('./model/collection');
-// var Comment = require('./model/comment');
-var Enroll = require('./model/enrollbo');
+var News = require('./model/newsbo');
 
 var Page = require('../../common/page');
 
-function ActivityService() {}
+function NewsService() {}
 
 //根据条件查询数据
-ActivityService.find = function(query, callback) {
+NewsService.find = function(query, callback) {
     if(query.id){
         query._id = query.id;
         delete query.id;
     }
-    Activity.find(query, function(err, ret) {
+    News.find(query, function(err, ret) {
         if (err) {
             return callback(err);
         }
@@ -23,7 +20,7 @@ ActivityService.find = function(query, callback) {
 }
 
 // 列表查询,分页
-ActivityService.findList = function(query, callback, top) {
+NewsService.findList = function(query, callback, top) {
     if (!query) {
         query = {};
     }
@@ -41,7 +38,9 @@ ActivityService.findList = function(query, callback, top) {
     delete query.row;
     delete query.start;
     var page = new Page();
-    Activity.count(query, function(err, count) {
+    console.log(query);
+    console.log(options);
+    News.count(query, function(err, count) {
         if (err) {
             callback(err);
             return console.error(err);
@@ -50,53 +49,28 @@ ActivityService.findList = function(query, callback, top) {
             callback(null, page);
             return;
         }
-        Activity.find(query, null, options, function(err, bos) {
+        News.find(query, null, options, function(err, bos) {
             if (err) {
                 callback(err);
                 return console.error(err);
             }
-            var flag = 0;
-            console.log('+++++'+count);
-            for(let i in bos) {
-                Enroll.find({activity_id: bos[i]._id},(err, ret) => {
-                    if(err) {
-                        callback(err);
-                        return console.error(err)
-                    }
-                    bos[i].enrollNum = ret.length;
-                    bos[i].enroll = ret;
-                    bos[i].recruited = 0;
-                    if(bos[i].enrollNum > 0) {
-                        for(let k in ret) {
-                            if(ret[k].status == 1) {
-                                bos[i].recruited = bos[i].recruited+1;
-                            }
-                        }
-                    }
-                    flag = flag + 1;
-                    console.log(flag)
-                })
-            }
-            if(flag === count) {
-                console.log('两个相同啦')
-                page.setPageAttr(count);
-                page.setData(bos);
-                return callback(null, page);
-            }
+            page.setPageAttr(count);
+            page.setData(bos);
+            return callback(null, page);
         });
     });
 };
 
 
 //保存
-ActivityService.save = function(bo, callback) {
+NewsService.save = function(bo, callback) {
     if (!bo.clients || bo.clients == '') {
         bo.clients = ['app', 'sms']
     }
     if (!bo.desctype || bo.desctype == '') {
         bo.desctype = 'txt';
     }
-    var entity = new Activity(bo);
+    var entity = new News(bo);
     entity.save(entity, function(err, ret) {
         if (err) {
             callback(err);
@@ -108,13 +82,13 @@ ActivityService.save = function(bo, callback) {
 }
 
 //修改（根据id）
-ActivityService.update = function(id, bo, callback) {
-    Activity.findOne({ _id: id }, function(err, org) {
+NewsService.update = function(id, bo, callback) {
+    News.findOne({ _id: id }, function(err, org) {
         if (err) {
             callback(err);
             return console.error(err);
         }
-        Activity.update({ _id: id }, bo, function(err, ret) {
+        News.update({ _id: id }, bo, function(err, ret) {
             if (err) {
                 callback(err);
                 return console.error(err);
@@ -125,11 +99,11 @@ ActivityService.update = function(id, bo, callback) {
 }
 
 //删除
-ActivityService.delete = function(query, callback) {
+NewsService.delete = function(query, callback) {
     if (!query) {
         query = {};
     }
-    Activity.remove(query, function(err, ret) {
+    News.remove(query, function(err, ret) {
         if (err) {
             return callback(err);
         }
@@ -138,11 +112,11 @@ ActivityService.delete = function(query, callback) {
 }
 
 // 根据查询条件统计
-ActivityService.countByQuery = function(query, callback) {
+NewsService.countByQuery = function(query, callback) {
     if (!query) {
         query = {};
     }
-    Activity.count(query, function(err, count) {
+    News.count(query, function(err, count) {
         if (err) {
             return callback(err);
         }
@@ -168,4 +142,4 @@ function getNowFormatDate() {
         seperator2 + date.getSeconds();
     return currentdate;
 }
-module.exports = ActivityService;
+module.exports = NewsService;
