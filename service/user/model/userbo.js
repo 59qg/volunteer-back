@@ -35,6 +35,10 @@ var userSchema = mongoose.Schema({
     "street_code": String,
     "community": String, //社区
     "community_code": String,
+    "pic": {
+        type: String,
+        default: 'http://localhost:3020/volunteer/images/photo/default.jpg',
+    }, //头像地址
     "status": {     //状态 0-禁用 1-正常
         type: Number,
         default: 1,

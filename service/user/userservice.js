@@ -77,6 +77,9 @@ UserService.update = function (id, bo, callback) {
             callback(err);
             return console.error(err);
         }
+        if(bo.id){
+            delete bo.id;
+        }
         User.update({_id: id}, bo, function(err, ret) {
            if(err) {
                callback(err);

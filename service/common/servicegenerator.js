@@ -14,7 +14,9 @@ ServiceGenerator.generate = function (model, key) {
             query._id = query.id;
             delete query.id;
         }
-        model.find(query, function (err, ret) {
+        let options = {};
+        options['sort'] = {'createdAt': -1};    //按时间逆序排序
+        model.find(query, null, options, function (err, ret) {
             if (err) {
                 return callback(err);
             }
@@ -34,7 +36,7 @@ ServiceGenerator.generate = function (model, key) {
         var options = {'$slice':2};
         options['limit'] = row;
         options['skip'] = start;
-        options['sort'] = {'create_at': -1};    //按时间逆序排序
+        options['sort'] = {'createAt': -1};    //按时间逆序排序
         if (top) {
             options['sort'] = {'top': -1};
         }

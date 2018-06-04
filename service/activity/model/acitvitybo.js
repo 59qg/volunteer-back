@@ -22,7 +22,7 @@ var activitySchema = mongoose.Schema({
     "county": String, //区县
     "county_code": String,
     "img": String,//图片
-    "status": {      //状态 0-禁用 1-审核中 2-开展中  3-已结束 4-已拒绝
+    "status": {      //状态 0-禁用 1-审核中 2-招募中 3-开展中 4-已结束 5-已拒绝
         type: Number,
         default: 1,
     }

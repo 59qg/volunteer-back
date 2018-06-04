@@ -55,34 +55,9 @@ ActivityService.findList = function(query, callback, top) {
                 callback(err);
                 return console.error(err);
             }
-            var flag = 0;
-            console.log('+++++'+count);
-            for(let i in bos) {
-                Enroll.find({activity_id: bos[i]._id},(err, ret) => {
-                    if(err) {
-                        callback(err);
-                        return console.error(err)
-                    }
-                    bos[i].enrollNum = ret.length;
-                    bos[i].enroll = ret;
-                    bos[i].recruited = 0;
-                    if(bos[i].enrollNum > 0) {
-                        for(let k in ret) {
-                            if(ret[k].status == 1) {
-                                bos[i].recruited = bos[i].recruited+1;
-                            }
-                        }
-                    }
-                    flag = flag + 1;
-                    console.log(flag)
-                })
-            }
-            if(flag === count) {
-                console.log('两个相同啦')
-                page.setPageAttr(count);
-                page.setData(bos);
-                return callback(null, page);
-            }
+            page.setPageAttr(count);
+            page.setData(bos);
+            callback(null, page);
         });
     });
 };
@@ -167,5 +142,24 @@ function getNowFormatDate() {
         " " + date.getHours() + seperator2 + date.getMinutes() +
         seperator2 + date.getSeconds();
     return currentdate;
+}
+
+ActivityService.updateStatus = function(activity, callback) {
+    let now = Date.now();
+    if(!(now < activity.recruit_time)) {
+        if(activity.status === 2) {
+            activity.status = 3;
+            this.update(activity.id, activity, (err, ret) => {
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, activity);
+            })
+        }
+        else{
+            return callback(null, activity);
+        }
+    }
+    else{return callback(null, activity);}
 }
 module.exports = ActivityService;

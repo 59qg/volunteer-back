@@ -11,6 +11,10 @@ var commentSchema = mongoose.Schema({
     "activity": String,
     "activity_id": String,
     "content": String, //评论内容
+    "star":{
+        type: Number,
+        default: 0,
+    }, //评论星级
     "status": {  //状态 0-删除 1-正常
         type: Number,
         default: 1,
